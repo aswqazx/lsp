@@ -2,12 +2,19 @@ package com.aswqazx.server.service.impl;
 
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.entity.param.LoginParam;
+import com.aswqazx.server.entity.param.UserParam;
 import com.aswqazx.server.entity.table.SysUser;
 import com.aswqazx.server.repository.SysUserRepository;
+import com.aswqazx.server.repository.SysUserSpecs;
 import com.aswqazx.server.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,7 +32,7 @@ public class SysUserServiceImpl implements SysUserService {
     private final SysUserRepository sysUserRepository;
 
     @Override
-    public ResultInfo login(LoginParam param) {
+    public ResultInfo userLogin(LoginParam param) {
         List<SysUser> sysUserList = sysUserRepository.findAllByName(param.getUsername());
         if (sysUserList.size() > 0) {
             SysUser sysUser = sysUserList.get(0);
@@ -42,7 +49,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public ResultInfo getLoginInfo(String id) {
+    public ResultInfo userInfo(String id) {
         String[] roles ={"admin"};
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Super Admin");
@@ -53,7 +60,20 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public ResultInfo logout() {
+    public ResultInfo userLogout() {
         return ResultInfo.success("成功");
+    }
+
+    @Override
+    public ResultInfo userList(UserParam param) {
+        int page = param.getPage() != 0 ? param.getPage() : 1;
+        int pageSize = param.getLimit() != 0 ? param.getLimit() : 20;
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC,"createTime"));
+        Page<SysUser> sysUserPage = sysUserRepository.findAll(SysUserSpecs.getWhereClause(param), pageable);
+        if (sysUserPage.getTotalElements() > 0) {
+            return ResultInfo.success("成功", sysUserPage.get(), sysUserPage.getTotalElements());
+        } else {
+            return ResultInfo.success("成功无数据");
+        }
     }
 }

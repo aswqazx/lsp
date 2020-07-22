@@ -2,6 +2,7 @@ package com.aswqazx.server.service;
 
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.entity.param.LoginParam;
+import com.aswqazx.server.entity.param.UserParam;
 
 /**
  * @author OMNIS
@@ -13,20 +14,26 @@ public interface SysUserService {
      * @param param
      * @return
      */
-    ResultInfo login(LoginParam param);
+    ResultInfo userLogin(LoginParam param);
 
     /**
      * getLoginInfo
      * @param id
      * @return
      */
-    ResultInfo getLoginInfo(String id);
+    ResultInfo userInfo(String id);
 
     /**
      * logout
      * @return
      */
-    ResultInfo logout();
+    ResultInfo userLogout();
+
+    /**
+     * userList
+     * @return
+     */
+    ResultInfo userList(UserParam param);
 
 
 }

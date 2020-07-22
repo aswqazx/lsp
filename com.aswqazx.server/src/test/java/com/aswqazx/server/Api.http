@@ -4,3 +4,9 @@ Content-Type: application/json
 {"username": "admin", "password": "123456"}
 
 ###
+POST {{baseUrl}}/base/user/list
+Content-Type: application/json
+
+{"name": "ad","page": 1, "pageSize": 20}
+
+###

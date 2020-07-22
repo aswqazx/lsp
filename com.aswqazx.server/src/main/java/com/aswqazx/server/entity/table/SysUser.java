@@ -97,4 +97,25 @@ public class SysUser implements Serializable {
     @Column(name = "DELETED")
     private String deleted;
 
+    /**
+     * 性别
+     */
+    @Basic
+    @Column(name = "SEX")
+    private String sex;
+
+    /**
+     * 单位编号
+     */
+    @Basic
+    @Column(name = "DEPT_ID")
+    private String deptId;
+
+    /**
+     * 单位名称
+     */
+    @Basic
+    @Column(name = "DEPT_NAME")
+    private String deptName;
+
 }
