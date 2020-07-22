@@ -1,0 +1,59 @@
+package com.aswqazx.server.service.impl;
+
+import com.aswqazx.server.entity.ResultInfo;
+import com.aswqazx.server.entity.param.LoginParam;
+import com.aswqazx.server.entity.table.SysUser;
+import com.aswqazx.server.repository.SysUserRepository;
+import com.aswqazx.server.service.SysUserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author OMNIS
+ */
+@Service
+@Log4j2
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class SysUserServiceImpl implements SysUserService {
+
+    private final SysUserRepository sysUserRepository;
+
+    @Override
+    public ResultInfo login(LoginParam param) {
+        List<SysUser> sysUserList = sysUserRepository.findAllByName(param.getUsername());
+        if (sysUserList.size() > 0) {
+            SysUser sysUser = sysUserList.get(0);
+            if (sysUser.getPassword().equals(param.getPassword())) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("token", "admin-token");
+                return ResultInfo.success("成功", map);
+            } else {
+                return ResultInfo.failure("密码不正确");
+            }
+        } else {
+            return ResultInfo.failure("用户名不存在");
+        }
+    }
+
+    @Override
+    public ResultInfo getLoginInfo(String id) {
+        String[] roles ={"admin"};
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "Super Admin");
+        map.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        map.put("introduction", "I am a super administrator");
+        map.put("roles", roles);
+        return ResultInfo.success("成功", map);
+    }
+
+    @Override
+    public ResultInfo logout() {
+        return ResultInfo.success("成功");
+    }
+}

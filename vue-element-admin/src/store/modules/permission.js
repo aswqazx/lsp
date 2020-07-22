@@ -1,4 +1,6 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
+import Layout from '@/layout'
+import { getRoutes } from '@/api/role'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -34,6 +36,24 @@ export function filterAsyncRoutes(routes, roles) {
   return res
 }
 
+export function filterAsyncServerRolesRouter(routes) {
+  const res = []
+  routes.forEach(item => {
+    const tmp = { ...item }
+    if (tmp.component === 'Layout') {
+      tmp.component = Layout
+    } else {
+      const component = tmp.component
+      tmp.component = (resolve) => require([`@/views/${component}.vue`], resolve)
+    }
+    if (tmp.children) {
+      tmp.children = filterAsyncServerRolesRouter(tmp.children)
+    }
+    res.push(tmp)
+  })
+  return res
+}
+
 const state = {
   routes: [],
   addRoutes: []
@@ -50,13 +70,20 @@ const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
-      if (roles.includes('admin')) {
+      /* if (roles.includes('admin')) {
         accessedRoutes = asyncRoutes || []
       } else {
         accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       }
       commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      resolve(accessedRoutes) */
+      getRoutes().then(response => {
+        const list = response.data
+        console.info(list)
+        accessedRoutes = filterAsyncServerRolesRouter(list)
+        commit('SET_ROUTES', accessedRoutes)
+        resolve(accessedRoutes)
+      })
     })
   }
 }
