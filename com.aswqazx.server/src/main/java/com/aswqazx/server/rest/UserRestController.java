@@ -2,7 +2,9 @@ package com.aswqazx.server.rest;
 
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.entity.param.LoginParam;
+import com.aswqazx.server.entity.param.UserDeleteParam;
 import com.aswqazx.server.entity.param.UserParam;
+import com.aswqazx.server.entity.table.SysUser;
 import com.aswqazx.server.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +46,19 @@ public class UserRestController {
 
     @PostMapping(value = "/list")
     public ResultInfo userList(@RequestBody UserParam param) {
-        log.info("user/login {}", param);
+        log.info("user/list {}", param);
         return sysUserService.userList(param);
+    }
+
+    @PostMapping(value = "/addOrUpdate")
+    public ResultInfo addOrUpdate(@RequestBody SysUser param) {
+        log.info("user/addOrUpdate {}", param);
+        return sysUserService.addOrUpdate(param);
+    }
+
+    @PostMapping(value = "/delete")
+    public ResultInfo userDelete(@RequestBody UserDeleteParam param) {
+        log.info("user/delete {}", param);
+        return sysUserService.userDelete(param);
     }
 }

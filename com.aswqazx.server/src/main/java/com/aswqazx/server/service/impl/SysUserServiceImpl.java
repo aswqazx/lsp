@@ -2,11 +2,13 @@ package com.aswqazx.server.service.impl;
 
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.entity.param.LoginParam;
+import com.aswqazx.server.entity.param.UserDeleteParam;
 import com.aswqazx.server.entity.param.UserParam;
 import com.aswqazx.server.entity.table.SysUser;
 import com.aswqazx.server.repository.SysUserRepository;
 import com.aswqazx.server.repository.SysUserSpecs;
 import com.aswqazx.server.service.SysUserService;
+import com.aswqazx.server.util.SnowFlake;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,11 @@ public class SysUserServiceImpl implements SysUserService {
 
     private final SysUserRepository sysUserRepository;
 
+    /**
+     * userLogin
+     * @param param
+     * @return
+     */
     @Override
     public ResultInfo userLogin(LoginParam param) {
         List<SysUser> sysUserList = sysUserRepository.findAllByName(param.getUsername());
@@ -48,6 +55,11 @@ public class SysUserServiceImpl implements SysUserService {
         }
     }
 
+    /**
+     * userInfo
+     * @param id
+     * @return
+     */
     @Override
     public ResultInfo userInfo(String id) {
         String[] roles ={"admin"};
@@ -59,11 +71,20 @@ public class SysUserServiceImpl implements SysUserService {
         return ResultInfo.success("成功", map);
     }
 
+    /**
+     * userLogout
+     * @return
+     */
     @Override
     public ResultInfo userLogout() {
         return ResultInfo.success("成功");
     }
 
+    /**
+     * userList
+     * @param param
+     * @return
+     */
     @Override
     public ResultInfo userList(UserParam param) {
         int page = param.getPage() != 0 ? param.getPage() : 1;
@@ -75,5 +96,31 @@ public class SysUserServiceImpl implements SysUserService {
         } else {
             return ResultInfo.success("成功无数据");
         }
+    }
+
+    /**
+     * addOrUpdate
+     * @param param
+     * @return
+     */
+    @Override
+    public ResultInfo addOrUpdate(SysUser param) {
+        if (param.getId() == null) {
+            param.setId(SnowFlake.getNextId());
+            param.setPassword("123456");
+        }
+        sysUserRepository.saveAndFlush(param);
+        return ResultInfo.success("成功");
+    }
+
+    /**
+     * userDelete
+     * @param param
+     * @return
+     */
+    @Override
+    public ResultInfo userDelete(UserDeleteParam param) {
+        sysUserRepository.deleteById(Long.parseLong(param.getId()));
+        return ResultInfo.success("成功");
     }
 }

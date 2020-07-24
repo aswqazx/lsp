@@ -1,6 +1,10 @@
 package com.aswqazx.server.entity.table;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +22,9 @@ public class SysUser implements Serializable {
      */
     @Id
     @Column(name = "ID")
-    private String id;
+    // Long转String 解决前端Long类型精度丢失
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
 
     /**
      * 姓名

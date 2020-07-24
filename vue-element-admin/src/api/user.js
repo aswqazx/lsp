@@ -30,3 +30,19 @@ export function getUserList(data) {
     data
   })
 }
+
+export function userAddOrUpdate(data) {
+  return request({
+    url: '/user/addOrUpdate',
+    method: 'post',
+    data
+  })
+}
+
+export function userDelete(data) {
+  return request({
+    url: '/user/delete',
+    method: 'post',
+    data
+  })
+}

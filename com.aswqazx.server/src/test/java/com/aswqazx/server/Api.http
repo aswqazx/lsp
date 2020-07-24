@@ -7,6 +7,6 @@ Content-Type: application/json
 POST {{baseUrl}}/base/user/list
 Content-Type: application/json
 
-{"name": "ad","page": 1, "pageSize": 20}
+{"page": 1, "pageSize": 20}
 
 ###

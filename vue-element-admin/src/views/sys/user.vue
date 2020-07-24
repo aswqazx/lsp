@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-card shadow="never" class="cardSearchForm">
+    <el-card shadow="always" class="cardSearchForm">
       <el-form label-position="right" :model="listQuery" label-width="80px">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
@@ -58,7 +58,7 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card shadow="never" class="cardBody">
+    <el-card shadow="always" class="cardBody">
       <div slot="header">
         <span>用户列表</span>
         <el-popover
@@ -79,7 +79,7 @@
         <el-tooltip effect="dark" content="刷新" placement="top">
           <i class="el-icon-refresh-right" style="float: right;  margin: 0 5px" @click="onRefresh" />
         </el-tooltip>
-        <el-button style="float: right; margin: -8px 5px" type="primary" icon="el-icon-plus">新建</el-button>
+        <el-button style="float: right; margin: -8px 5px" type="primary" icon="el-icon-plus" @click="onAdd">新建</el-button>
 
       </div>
       <el-table
@@ -93,49 +93,49 @@
         <empty slot="empty" />
 
         <el-table-column v-if="showColName" label="姓名" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.name }}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColUsername" label="用户名" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.username }}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.username }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColSex" label="性别" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.sex |sexFilter }}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.sex |sexFilter }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColTelephone" label="电话" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.telephone }}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.telephone }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColDeptName" label="单位" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.deptName }}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.deptName }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColCreateTime" label="创建时间" align="center">
-          <template slot-scope="{row}">
-            <span>{{ row.createTime }}</span>
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColStatus" label="状态" align="center">
-          <template slot-scope="{row}">
-            <el-tag :type="row.status | statusTagFilter">
-              {{ row.status | statusFilter }}
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.status | statusTagFilter">
+              {{ scope.row.status | statusFilter }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
-          <template slot-scope="{ row }">
-            <el-button type="text" size="mini" @click="onEdit(row)">
+          <template slot-scope="scope">
+            <el-button type="text" @click="onEdit(scope.row)">
               修改
             </el-button>
             <el-divider direction="vertical" />
-            <el-button type="text" size="mini" @click="onDelete(row)">
+            <el-button type="text" @click="onDelete(scope)">
               删除
             </el-button>
           </template>
@@ -143,18 +143,20 @@
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </el-card>
+    <userAddOrUpdate ref="userAddOrUpdate" @afterUserAddOrUpdate="afterUserAddOrUpdate" />
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { getUserList } from '@/api/user'
+import { getUserList, userDelete } from '@/api/user'
 import empty from '@/components/Empty'
+import userAddOrUpdate from './components/UserAddOrUpdate'
 
 export default {
   name: 'SysUser',
-  components: { Pagination, empty },
+  components: { Pagination, empty, userAddOrUpdate },
   directives: { waves },
   filters: {
     statusTagFilter(status) {
@@ -221,18 +223,35 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    onEdit() {
-
+    onAdd() {
+      this.$refs.userAddOrUpdate.dialogStatus = 'create'
+      this.$refs.userAddOrUpdate.getDetailsFn()
     },
-    onDelete() {
-
+    onEdit(row) {
+      console.info(row)
+      this.$refs.userAddOrUpdate.temp = row
+      this.$refs.userAddOrUpdate.dialogStatus = 'update'
+      this.$refs.userAddOrUpdate.getDetailsFn()
+    },
+    onDelete({ $index, row }) {
+      this.$confirm('您确认要删除该信息吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        await userDelete({ id: row.id })
+        this.list.splice($index, 1)
+        this.$message({
+          title: '成功',
+          message: '删除成功!',
+          type: 'success',
+          duration: 2000
+        })
+      }).catch(err => { console.error(err) })
     },
     onRefresh() {
       this.listQuery.page = 1
       this.getList()
-    },
-    onTableSet() {
-
     },
     showMore() {
       if (this.showBut) {
@@ -249,6 +268,9 @@ export default {
       this.list = data
       this.total = total
       this.listLoading = false
+    },
+    afterUserAddOrUpdate() {
+      this.getList()
     }
   }
 }
