@@ -6,6 +6,8 @@ import com.aswqazx.server.entity.param.UserDeleteParam;
 import com.aswqazx.server.entity.param.UserParam;
 import com.aswqazx.server.entity.table.SysUser;
 import com.aswqazx.server.service.SysUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author OMNIS
  */
+@Api(tags="用户管理")
 @RestController
 @RequestMapping(value = "/user")
 @Log4j2
@@ -25,18 +28,21 @@ public class UserRestController {
     private final HttpServletRequest request;
     private final SysUserService sysUserService;
 
+    @ApiOperation("登录")
     @PostMapping(value = "/login")
     public ResultInfo userLogin(@RequestBody LoginParam param) {
         log.info("user/login {}", param);
         return sysUserService.userLogin(param);
     }
 
+    @ApiOperation("登录信息")
     @GetMapping(value = "/info")
     public ResultInfo userInfo(@RequestParam(name = "token") String token) {
         log.info("user/info {}", token);
         return sysUserService.userInfo(token);
     }
 
+    @ApiOperation("登出")
     @PostMapping(value = "/logout")
     public ResultInfo userLogout() {
         String token = request.getHeader("X-Token");
@@ -44,18 +50,21 @@ public class UserRestController {
         return sysUserService.userLogout();
     }
 
+    @ApiOperation("用户列表")
     @PostMapping(value = "/list")
     public ResultInfo userList(@RequestBody UserParam param) {
         log.info("user/list {}", param);
         return sysUserService.userList(param);
     }
 
+    @ApiOperation("登录")
     @PostMapping(value = "/addOrUpdate")
     public ResultInfo addOrUpdate(@RequestBody SysUser param) {
         log.info("user/addOrUpdate {}", param);
         return sysUserService.addOrUpdate(param);
     }
 
+    @ApiOperation("用户删除")
     @PostMapping(value = "/delete")
     public ResultInfo userDelete(@RequestBody UserDeleteParam param) {
         log.info("user/delete {}", param);

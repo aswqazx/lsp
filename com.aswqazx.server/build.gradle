@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'org.springframework.boot' version '2.3.2.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
@@ -16,6 +16,7 @@ configurations {
 }
 
 repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
     mavenCentral()
 }
 
@@ -30,6 +31,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
     annotationProcessor 'org.projectlombok:lombok'
