@@ -20,4 +20,11 @@ public interface SysUserRepository
      * @return
      */
     List<SysUser> findAllByName(String name);
+
+    /**
+     * 通过username查找user列表
+     * @param username
+     * @return
+     */
+    List<SysUser> findAllByUsername(String username);
 }

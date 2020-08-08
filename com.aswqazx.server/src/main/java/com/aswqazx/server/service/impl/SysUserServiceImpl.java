@@ -8,6 +8,7 @@ import com.aswqazx.server.entity.table.SysUser;
 import com.aswqazx.server.repository.SysUserRepository;
 import com.aswqazx.server.repository.SysUserSpecs;
 import com.aswqazx.server.service.SysUserService;
+import com.aswqazx.server.util.JWTUtil;
 import com.aswqazx.server.util.SnowFlake;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +47,8 @@ public class SysUserServiceImpl implements SysUserService {
             SysUser sysUser = sysUserList.get(0);
             if (sysUser.getPassword().equals(param.getPassword())) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("token", "admin-token");
+                String token = JWTUtil.sign(sysUser.getUsername());
+                map.put("token", token);
                 return ResultInfo.success("成功", map);
             } else {
                 return ResultInfo.failure("密码不正确");
@@ -57,18 +60,25 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * userInfo
-     * @param id
+     * @param token
      * @return
      */
     @Override
-    public ResultInfo userInfo(String id) {
-        String[] roles ={"admin"};
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", "Super Admin");
-        map.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        map.put("introduction", "I am a super administrator");
-        map.put("roles", roles);
-        return ResultInfo.success("成功", map);
+    public ResultInfo userInfo(String token) {
+        String username = JWTUtil.getUsername(token);
+        List<SysUser> sysUserList = sysUserRepository.findAllByUsername(username);
+        if (sysUserList.size() > 0) {
+            SysUser sysUser = sysUserList.get(0);
+            String[] roles ={"admin"};
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", sysUser.getName());
+            map.put("avatar", sysUser.getAvatar());
+            map.put("introduction", "I am a super administrator");
+            map.put("roles", roles);
+            return ResultInfo.success("成功", map);
+        } else {
+            return ResultInfo.failure("用户不存在");
+        }
     }
 
     /**
@@ -108,6 +118,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (param.getId() == null) {
             param.setId(SnowFlake.getNextId());
             param.setPassword("123456");
+            param.setStatus("1");
+            param.setCreatorId("admin");
+            param.setCreateTime(new Date());
+            param.setDeleted("2");
         }
         sysUserRepository.saveAndFlush(param);
         return ResultInfo.success("成功");

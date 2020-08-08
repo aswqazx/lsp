@@ -1,5 +1,6 @@
 package com.aswqazx.server.rest;
 
+import com.aswqazx.server.annotation.UserAuthenticate;
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.service.SysMenuService;
 import io.swagger.annotations.Api;
@@ -26,6 +27,7 @@ public class RoleRestController {
 
     @ApiOperation("路由菜单")
     @GetMapping(value = "/routes")
+    @UserAuthenticate
     public ResultInfo routes() {
         String token = request.getHeader("X-Token");
         log.info("role/routes {}", token);

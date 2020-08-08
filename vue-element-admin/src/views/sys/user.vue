@@ -14,37 +14,25 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-            <el-form-item label="活动区域">
-              <el-select v-model="listQuery.region" placeholder="请输入">
-                <el-option label="区域一" value="shanghai" />
-                <el-option label="区域二" value="beijing" />
+            <el-form-item label="性别">
+              <el-select v-model="listQuery.sex" placeholder="请选择">
+                <el-option label="男" value="1" />
+                <el-option label="女" value="2" />
               </el-select>
             </el-form-item>
           </el-col>
           <transition-group name="el-fade-in-linear">
-            <el-col v-show="showBut" key="a" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="审批人">
-                <el-input v-model="listQuery.username" placeholder="请输入" />
-              </el-form-item>
-            </el-col>
-            <el-col v-show="showBut" key="b" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="审批人">
+            <el-col v-show="showBut" key="telephone" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+              <el-form-item label="电话">
                 <el-input v-model="listQuery.telephone" placeholder="请输入" />
               </el-form-item>
             </el-col>
-            <el-col v-show="showBut" key="c" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="审批人">
-                <el-input v-model="listQuery.user" placeholder="请输入" />
-              </el-form-item>
-            </el-col>
-            <el-col v-show="showBut" key="d" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="审批人">
-                <el-input v-model="listQuery.user" placeholder="请输入" />
-              </el-form-item>
-            </el-col>
-            <el-col v-show="showBut" key="e" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="审批人">
-                <el-input v-model="listQuery.user" placeholder="请输入" />
+            <el-col v-show="showBut" key="sex" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
+              <el-form-item label="状态">
+                <el-select v-model="listQuery.sex" placeholder="请选择">
+                  <el-option label="正常" value="1" />
+                  <el-option label="异常" value="2" />
+                </el-select>
               </el-form-item>
             </el-col>
           </transition-group>
@@ -191,6 +179,7 @@ export default {
         page: 1,
         limit: 20,
         name: undefined,
+        sex: undefined,
         username: undefined,
         telephone: undefined
       },

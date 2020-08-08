@@ -20,10 +20,10 @@ public interface SysUserService {
 
     /**
      * getLoginInfo
-     * @param id
+     * @param token
      * @return
      */
-    ResultInfo userInfo(String id);
+    ResultInfo userInfo(String token);
 
     /**
      * logout

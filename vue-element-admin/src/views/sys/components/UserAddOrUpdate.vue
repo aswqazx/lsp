@@ -2,7 +2,19 @@
   <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="handleClose">
     <el-form ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
       <el-form-item label="姓名" prop="name">
-        <el-input v-model="temp.name" placeholder="请选择" />
+        <el-input v-model="temp.name" placeholder="请输入" />
+      </el-form-item>
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="temp.username" placeholder="请输入" />
+      </el-form-item>
+      <el-form-item label="性别" prop="sex">
+        <el-select v-model="temp.sex" placeholder="请选择" style="width: 100%">
+          <el-option label="男" value="1" />
+          <el-option label="女" value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="电话" prop="telephone">
+        <el-input v-model="temp.telephone" placeholder="请输入" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -60,7 +72,7 @@ export default {
       this.dialogFormVisible = false
       this.$notify({
         title: '成功',
-        message: '添加成功',
+        message: '成功',
         type: 'success',
         duration: 2000
       })

@@ -21,6 +21,13 @@ public class ResultInfo implements Serializable {
         return resultInfo;
     }
 
+    public static ResultInfo failure2(String message) {
+        ResultInfo resultInfo = new ResultInfo();
+        resultInfo.setCode(4);
+        resultInfo.setMessage(message);
+        return resultInfo;
+    }
+
 
     public static ResultInfo success(String message) {
         ResultInfo resultInfo = new ResultInfo();

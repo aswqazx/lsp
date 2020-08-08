@@ -32,6 +32,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'com.auth0:java-jwt:3.10.3'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
     annotationProcessor 'org.projectlombok:lombok'

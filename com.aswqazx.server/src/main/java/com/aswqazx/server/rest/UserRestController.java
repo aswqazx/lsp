@@ -1,5 +1,6 @@
 package com.aswqazx.server.rest;
 
+import com.aswqazx.server.annotation.UserAuthenticate;
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.entity.param.LoginParam;
 import com.aswqazx.server.entity.param.UserDeleteParam;
@@ -37,6 +38,7 @@ public class UserRestController {
 
     @ApiOperation("登录信息")
     @GetMapping(value = "/info")
+    @UserAuthenticate
     public ResultInfo userInfo(@RequestParam(name = "token") String token) {
         log.info("user/info {}", token);
         return sysUserService.userInfo(token);
@@ -44,6 +46,7 @@ public class UserRestController {
 
     @ApiOperation("登出")
     @PostMapping(value = "/logout")
+    @UserAuthenticate
     public ResultInfo userLogout() {
         String token = request.getHeader("X-Token");
         log.info("user/logout {}", token);
@@ -52,13 +55,15 @@ public class UserRestController {
 
     @ApiOperation("用户列表")
     @PostMapping(value = "/list")
+    @UserAuthenticate
     public ResultInfo userList(@RequestBody UserParam param) {
         log.info("user/list {}", param);
         return sysUserService.userList(param);
     }
 
-    @ApiOperation("登录")
+    @ApiOperation("添加或修改")
     @PostMapping(value = "/addOrUpdate")
+    @UserAuthenticate
     public ResultInfo addOrUpdate(@RequestBody SysUser param) {
         log.info("user/addOrUpdate {}", param);
         return sysUserService.addOrUpdate(param);
@@ -66,6 +71,7 @@ public class UserRestController {
 
     @ApiOperation("用户删除")
     @PostMapping(value = "/delete")
+    @UserAuthenticate
     public ResultInfo userDelete(@RequestBody UserDeleteParam param) {
         log.info("user/delete {}", param);
         return sysUserService.userDelete(param);
