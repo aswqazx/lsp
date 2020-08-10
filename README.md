@@ -1,7 +1,8 @@
 # 简介 #
 **基于vue-element-admin和springboot基础项目**
 > 项目介绍
-- **`com.aswqazx.server` ：采用springboot的后端服务**
+- **`com.aswqazx.server` ：采用springboot的后端base服务**
+- **`com.aswqazx.camunda` ：采用springboot的后端camunda服务**
 - **`vue-element-admin` ：基于vue-element-admin对接后端服务**
 # 更新记录 #
  - 200720 初次导入
