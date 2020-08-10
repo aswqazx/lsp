@@ -4,35 +4,14 @@
       <el-form label-position="right" :model="listQuery" label-width="80px">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-            <el-form-item label="姓名">
+            <el-form-item label="名称">
               <el-input v-model="listQuery.name" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-            <el-form-item label="用户名">
-              <el-input v-model="listQuery.username" placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-            <el-form-item label="性别">
-              <el-select v-model="listQuery.sex" placeholder="请选择">
-                <el-option label="男" value="1" />
-                <el-option label="女" value="2" />
-              </el-select>
             </el-form-item>
           </el-col>
           <transition-group name="el-fade-in-linear">
             <el-col v-show="showBut" key="telephone" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
               <el-form-item label="电话">
                 <el-input v-model="listQuery.telephone" placeholder="请输入" />
-              </el-form-item>
-            </el-col>
-            <el-col v-show="showBut" key="sex" :xs="24" :sm="12" :md="8" :lg="6" :xl="6">
-              <el-form-item label="状态">
-                <el-select v-model="listQuery.sex" placeholder="请选择">
-                  <el-option label="正常" value="1" />
-                  <el-option label="异常" value="2" />
-                </el-select>
               </el-form-item>
             </el-col>
           </transition-group>
@@ -48,18 +27,15 @@
     </el-card>
     <el-card shadow="always" class="cardBody">
       <div slot="header">
-        <span>用户列表</span>
+        <span>单位列表</span>
         <el-popover
           placement="bottom"
           title="列设置"
           width="150"
           trigger="click"
         >
-          <el-checkbox v-model="showColName" @change="showColName !== showColName">姓名</el-checkbox>
-          <el-checkbox v-model="showColUsername" @change="showColUsername !== showColUsername">用户名</el-checkbox>
-          <el-checkbox v-model="showColSex" @change="showColSex !== showColSex">性别</el-checkbox>
-          <el-checkbox v-model="showColTelephone" @change="showColTelephone !== showColTelephone">电话</el-checkbox>
-          <el-checkbox v-model="showColDeptName" @change="showColDeptName !== showColDeptName">单位</el-checkbox>
+          <el-checkbox v-model="showColName" @change="showColName !== showColName">名称</el-checkbox>
+          <el-checkbox v-model="showColPreName" @change="showColPreName !== showColPreName">上级名称</el-checkbox>
           <el-checkbox v-model="showColCreateTime" @change="showColCreateTime !== showColCreateTime">创建时间</el-checkbox>
           <el-checkbox v-model="showColStatus" @change="showColStatus !== showColStatus">状态</el-checkbox>
           <i slot="reference" class="el-icon-setting" style="float: right; margin: 0 5px" />
@@ -76,33 +52,19 @@
         fit
         highlight-current-row
         style="width: 100%;"
+        row-key="id"
         :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       >
         <empty slot="empty" />
 
-        <el-table-column v-if="showColName" label="姓名" align="center">
+        <el-table-column v-if="showColName" label="名称" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="showColUsername" label="用户名" align="center">
+        <el-table-column v-if="showColPreName" label="上级名称" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.username }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="showColSex" label="性别" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.sex |sexFilter }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="showColTelephone" label="电话" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.telephone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column v-if="showColDeptName" label="单位" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.deptName }}</span>
+            <span>{{ scope.row.preName }}</span>
           </template>
         </el-table-column>
         <el-table-column v-if="showColCreateTime" label="创建时间" align="center">
@@ -131,20 +93,20 @@
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </el-card>
-    <userAddOrUpdate ref="userAddOrUpdate" @afterUserAddOrUpdate="afterUserAddOrUpdate" />
+    <deptAddOrUpdate ref="deptAddOrUpdate" @afterDeptAddOrUpdate="afterDeptAddOrUpdate" />
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { getUserList, userDelete } from '@/api/user'
+import { getDeptList, deptDelete } from '@/api/dept'
 import empty from '@/components/Empty'
-import userAddOrUpdate from './components/UserAddOrUpdate'
+import deptAddOrUpdate from './components/DeptAddOrUpdate'
 
 export default {
-  name: 'SysUser',
-  components: { Pagination, empty, userAddOrUpdate },
+  name: 'SysDept',
+  components: { Pagination, empty, deptAddOrUpdate },
   directives: { waves },
   filters: {
     statusTagFilter(status) {
@@ -160,13 +122,6 @@ export default {
         2: '异常'
       }
       return statusMap[status]
-    },
-    sexFilter(status) {
-      const statusMap = {
-        1: '男',
-        2: '女'
-      }
-      return statusMap[status]
     }
   },
   props: {},
@@ -178,18 +133,12 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        name: undefined,
-        sex: undefined,
-        username: undefined,
-        telephone: undefined
+        name: undefined
       },
       showBut: false,
       showText: '展开',
       showColName: true,
-      showColUsername: true,
-      showColSex: true,
-      showColTelephone: true,
-      showColDeptName: true,
+      showColPreName: true,
       showColCreateTime: true,
       showColStatus: true
     }
@@ -204,8 +153,6 @@ export default {
     onReset() {
       this.listQuery.page = 1
       this.listQuery.name = undefined
-      this.listQuery.username = undefined
-      this.listQuery.telephone = undefined
       this.getList()
     },
     onSearch() {
@@ -213,14 +160,14 @@ export default {
       this.getList()
     },
     onAdd() {
-      this.$refs.userAddOrUpdate.dialogStatus = 'create'
-      this.$refs.userAddOrUpdate.getDetailsFn()
+      this.$refs.deptAddOrUpdate.dialogStatus = 'create'
+      this.$refs.deptAddOrUpdate.getDetailsFn()
     },
     onEdit(row) {
       console.info(row)
-      this.$refs.userAddOrUpdate.temp = row
-      this.$refs.userAddOrUpdate.dialogStatus = 'update'
-      this.$refs.userAddOrUpdate.getDetailsFn()
+      this.$refs.deptAddOrUpdate.temp = row
+      this.$refs.deptAddOrUpdate.dialogStatus = 'update'
+      this.$refs.deptAddOrUpdate.getDetailsFn()
     },
     onDelete({ $index, row }) {
       this.$confirm('您确认要删除该信息吗?', '提示', {
@@ -228,7 +175,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-        await userDelete({ id: row.id })
+        await deptDelete({ id: row.id })
         this.list.splice($index, 1)
         this.$message({
           title: '成功',
@@ -253,12 +200,12 @@ export default {
     },
     async getList() {
       this.listLoading = true
-      const { data, total } = await getUserList(this.listQuery)
+      const { data, total } = await getDeptList(this.listQuery)
       this.list = data
       this.total = total
       this.listLoading = false
     },
-    afterUserAddOrUpdate() {
+    afterDeptAddOrUpdate() {
       this.getList()
     }
   }

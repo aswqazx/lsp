@@ -63,7 +63,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (StringUtils.isEmpty(token)) {
                 log.info("没有token，请重新登录");
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.setStatus(401);
                 SendMsgUtil.sendJsonMessage(response, ResultInfo.failure2("没有token，请重新登录"));
                 return false;
             }
@@ -71,7 +70,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (StringUtils.isEmpty(username)) {
                 log.info("无效token，请重新登录 username is null");
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.setStatus(401);
                 SendMsgUtil.sendJsonMessage(response, ResultInfo.failure2("无效token，请重新登录"));
                 return false;
             }
@@ -79,7 +77,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (sysUserList.size() == 0) {
                 log.info("用户名不存在，请重新登录：{}", username);
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.setStatus(401);
                 SendMsgUtil.sendJsonMessage(response, ResultInfo.failure2("用户名不存在，请重新登录"));
                 return false;
             }
@@ -88,7 +85,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (!verify) {
                 log.info("token失效，请重新登录");
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.setStatus(401);
                 SendMsgUtil.sendJsonMessage(response, ResultInfo.failure2("token失效，请重新登录"));
                 return false;
             }
