@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- status=debug 可以查看log4j的装配过程 -->
+<configuration status="off" monitorInterval="1800">
+    <properties>
+        <Property name="fileName">C:/logs/aswqazx/camunda</Property>
+        <Property name="fileGz">C:/logs/aswqazx/camunda/7z</Property>
+    </properties>
+    <appenders>
+        <!-- 输出控制台日志的配置 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!-- 输出日志的格式 -->
+            <PatternLayout pattern="%clr{%date{yyyy-MM-dd HH:mm:ss.SSS}}{faint}  %clr{%-5level} %clr{${sys:PID}}{magenta} %clr{[%t]}{faint} %clr{%logger:%L{36}}{cyan} - %msg%n"/>
+        </Console>
+        <!-- 打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
+        <RollingRandomAccessFile name="infoFile" fileName="${fileName}/info.log" immediateFlush="false"
+                                 filePattern="${fileGz}/$${date:yyyy-MM-dd}/%d{yyyy-MM-dd-HH}-%i-info.log.gz">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${sys:PID} [%t] %logger:%L{36} - %msg%n"/>
+
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+                <!--<SizeBasedTriggeringPolicy size="20 KB"/>-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+
+            <Filters>
+                <!-- 只记录info和warn级别信息 -->
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的 -->
+            <DefaultRolloverStrategy max="50"/>
+        </RollingRandomAccessFile>
+        <!-- 存储所有error信息 -->
+        <RollingRandomAccessFile name="errorFile" fileName="${fileName}/error.log" immediateFlush="false"
+                                 filePattern="${fileGz}/$${date:yyyy-MM-dd}/%d{yyyy-MM-dd-HH}-%i-error.log.gz">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${sys:PID} [%t] %logger:%L{36} - %msg%n"/>
+
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+                <!--<SizeBasedTriggeringPolicy size="50 KB"/>-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+
+            <Filters>
+                <!-- 只记录error级别信息 -->
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+
+            <!-- 指定每天的最大压缩包个数，默认7个，超过了会覆盖之前的 -->
+            <DefaultRolloverStrategy max="50"/>
+        </RollingRandomAccessFile>
+    </appenders>
+    <loggers>
+        <!-- Root Logger -->
+        <Root level="info" includeLocation="false">
+            <appender-ref ref="console" />
+            <appender-ref ref="infoFile" />
+            <appender-ref ref="errorFile" />
+        </Root>
+    </loggers>
+</configuration>
