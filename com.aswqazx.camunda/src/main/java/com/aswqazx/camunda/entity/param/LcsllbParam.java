@@ -10,7 +10,7 @@ import lombok.Data;
 public class LcsllbParam {
 
     private int page;
-    private int size;
+    private int limit;
     /**
      * 流程名称
      */

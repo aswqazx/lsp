@@ -32,7 +32,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Override
     public ResultInfo routes() {
-        List<SysMenu> sysMenuList = sysMenuRepository.findAllByOrderByOrderNumDesc();
+        List<SysMenu> sysMenuList = sysMenuRepository.findAllByOrderByOrderNumAsc();
         if (sysMenuList.size() > 0) {
             List<Route> routeList = new ArrayList<>();
             for (SysMenu sysMenu : sysMenuList) {

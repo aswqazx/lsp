@@ -10,7 +10,7 @@ import lombok.Data;
 public class WdsqParam {
 
     private int page;
-    private int size;
+    private int limit;
     /**
      * 申请人
      */

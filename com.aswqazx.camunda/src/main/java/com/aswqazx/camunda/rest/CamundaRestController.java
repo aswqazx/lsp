@@ -63,7 +63,7 @@ public class CamundaRestController {
                     userTask.setCamundaCandidateGroups("${dept}");
                 }
             }
-            System.out.println(modelInstance);
+            log.info(modelInstance);
             DeploymentBuilder deploymentBuilder = repositoryService.createDeployment();
             Deployment deploy = deploymentBuilder
                     .name(fileName)
@@ -113,12 +113,12 @@ public class CamundaRestController {
         }
         long count = 0;
         List<ProcessDefinition> processDefinitionList = null;
-        if (param.getPage() == 0 && param.getSize() == 0) {
+        if (param.getPage() == 0 && param.getLimit() == 0) {
             count = processDefinitionQuery.count();
             processDefinitionList = processDefinitionQuery.list();
         } else {
             count = processDefinitionQuery.count();
-            processDefinitionList = processDefinitionQuery.listPage((param.getPage() - 1) * param.getSize(),param.getSize());
+            processDefinitionList = processDefinitionQuery.listPage((param.getPage() - 1) * param.getLimit(), param.getLimit());
         }
         List<Map<String, Object>> resultList = new ArrayList<>();
         for(ProcessDefinition processDefinition: processDefinitionList){
@@ -281,7 +281,7 @@ public class CamundaRestController {
             }
         }
         long count = historicProcessInstanceQuery.count();
-        List<HistoricProcessInstance> list = historicProcessInstanceQuery.listPage((param.getPage() - 1) * param.getSize(),param.getSize());
+        List<HistoricProcessInstance> list = historicProcessInstanceQuery.listPage((param.getPage() - 1) * param.getLimit(), param.getLimit());
         for (HistoricProcessInstance historicProcessInstance : list) {
             Map<String, Object> map = new HashMap<>();
             map.put("processDefinitionId", historicProcessInstance.getProcessDefinitionId());

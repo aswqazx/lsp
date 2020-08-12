@@ -20,5 +20,5 @@ public interface SysMenuRepository
      * ORDER_NUM排序获取列表
      * @return
      */
-    List<SysMenu> findAllByOrderByOrderNumDesc();
+    List<SysMenu> findAllByOrderByOrderNumAsc();
 }
