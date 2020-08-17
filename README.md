@@ -4,6 +4,9 @@
 - **`com.aswqazx.server` ：采用springboot的后端base服务**
 - **`com.aswqazx.camunda` ：采用springboot的后端camunda服务**
 - **`vue-element-admin` ：基于vue-element-admin对接后端服务**
+- **`deno_demo` ：deno mysql例子**
+- **`node_koa_demo` ：基于koa的node mysql基础例子**
+- **`node_koa_demo2` ：基于koa的node mysql jwt sequelize基础例子**
 # 更新记录 #
  - 200720 初次导入
  - 200722 登录、菜单
@@ -14,3 +17,4 @@
  - 200810 更新 添加单位模块
  - 200810 更新 添加camunda
  - 200812 更新 添加前端工作流和bpmnjs
+ - 200817 更新 添加deno node_koa例子

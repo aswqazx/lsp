@@ -1,0 +1,6 @@
+POST http://127.0.0.1:3000/users/getList
+Content-Type: application/json
+
+{"name":"aa","test":"aaaa"}
+
+###
