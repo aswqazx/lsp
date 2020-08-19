@@ -1,12 +1,12 @@
-import { Client } from "https://deno.land/x/mysql/mod.ts";
+import { Client } from "../deps.ts";
 
 const client = await new Client();
 
 client.connect({
-    username: "aswqazx",
-    password: "aswqazx",
-    hostname: "127.0.0.1",
-    db: "aswqazx",
+    username: "root",
+    password: "1234QWERasdf.",
+    hostname: "192.168.1.241",
+    db: "zwkhd",
     poolSize: 3, // connection limit
 
 });

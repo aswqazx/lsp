@@ -1,0 +1,5 @@
+- deno run https://deno.land/std/examples/welcome.ts
+- set http_proxy=http://127.0.0.1:7890
+- deno run --allow-net --allow-env --allow-read server.ts
+- 151.101.76.133 raw.githubusercontent.com
+- denon start

@@ -1,8 +1,10 @@
-export default {
-    getIndex: async (
+import { log } from "../deps.ts";
+
+class Controller {
+    static async getIndex(
         { response, request }: { response: any, request: any },
-        next: Function,
-    ) => {
+        next: Function) {
+        log.info("aaaaa")
         response.status = 200;
         response.body = {
             code: 1,
@@ -10,4 +12,6 @@ export default {
             data: null
         };
     }
-};
+}
+
+export default Controller;
