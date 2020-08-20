@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "../deps.ts";
 
-class SysUserModel extends Model {
+export class SysUserModel extends Model {
     static table = "sys_user";
     static fields = {
         asid: {
@@ -38,5 +38,3 @@ class SysUserModel extends Model {
         }
     };
 }
-
-export default SysUserModel;

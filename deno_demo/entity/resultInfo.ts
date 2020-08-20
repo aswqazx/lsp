@@ -1,20 +1,16 @@
-class ResultInfo {
+export class ResultInfo {
     static failure(message: any) {
-        let result = {
+        return {
             code: 2,
             message: message
         };
-        return result;
     }
     static success(message: any, data: any, total: any) {
-        let result = {
+        return {
             code: 1,
             message: message,
             data: data,
             total: total
         };
-        return result;
     }
 }
-
-export default ResultInfo;

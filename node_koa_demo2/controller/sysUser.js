@@ -21,7 +21,7 @@ const login = async (ctx, next) => {
     })
     if (result) {
       if (await result.password === body.password) {
-        const token = jwt.sign({ name: body.username }, jwtConfig.secret, {expiresIn: jwtConfig.expiresIn})
+        const token = jwt.sign({ username: body.username }, jwtConfig.secret, {expiresIn: jwtConfig.expiresIn})
         const data = {
           token: token
         }

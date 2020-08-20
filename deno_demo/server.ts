@@ -1,24 +1,44 @@
-import { Application, v4, log, load } from "./deps.ts";
+import { Application, v4, log, c, load } from "./deps.ts";
+import { indexRouter } from "./routes/indexRouter.ts";
+import { sysUserRouter } from "./routes/sysUserRouter.ts";
+import { denondb } from "./config/denodbConfig.ts";
 
-import sysUserRouter from "./routes/sysUser.ts";
-import indexRouter from "./routes/index.ts";
-import { db } from "./config/denodbConfig.ts";
+// log
+await log.setup({
+    handlers: {
+        console: new log.handlers.ConsoleHandler("DEBUG", {
+            formatter: "{datetime} [{levelName}] {msg}"
+        }),
+    },
+    loggers: {
+        default: {
+            level: "DEBUG",
+            handlers: ["console"],
+        },
+    },
+});
 
 // uuid
 const myUUID = v4.generate();
-log.info(myUUID);
+log.info(`uuid is: ${c.red(myUUID)}`)
+log.debug("this is debug");
+log.info("this is info");
+log.warning("this is warning");
+log.error("this is error");
+log.critical("this is critical");
 
 // denv
 await load(".env");
 
 const app = new Application();
-const port: number = Number(Deno.env.get("PORT"));
+const port = Deno.env.get("SERVER_PORT") || "";
 
 app.use(indexRouter.routes(), indexRouter.allowedMethods());
 app.use(sysUserRouter.routes(), sysUserRouter.allowedMethods());
 
-await db.sync();
+// denodb
+await denondb.sync();
 
 // console.log('running on port ', port);
-log.info(`Server running on port: ${port}`)
-await app.listen({port});
+log.info(`Server running on port: ${c.yellow(port)}`)
+await app.listen({port: Number(port)});

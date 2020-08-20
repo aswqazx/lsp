@@ -1,6 +1,17 @@
+GET http://127.0.0.1:3000/
+Accept: application/json
+
+###
 POST http://127.0.0.1:3000/users/getList
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhYSIsImV4cCI6MTU5Nzg5Mjc4OCwidXNlcm5hbWUiOiJhYSJ9.7HOXFv-mJOrc5mrPxXLc0Sp_3w21dLYj15Cr39BgLV4
 
 {"name":".env", "page": 1, "limit": 10}
+
+###
+POST http://127.0.0.1:3000/users/login
+Content-Type: application/json
+
+{"username":"aa", "password": "aa"}
 
 ###

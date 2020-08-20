@@ -1,8 +1,8 @@
 import { Client } from "../deps.ts";
 
-const client = await new Client();
+export const mysqlClient = new Client();
 
-client.connect({
+mysqlClient.connect({
     username: "root",
     password: "1234QWERasdf.",
     hostname: "192.168.1.241",
@@ -10,5 +10,3 @@ client.connect({
     poolSize: 3, // connection limit
 
 });
-
-export default client;
