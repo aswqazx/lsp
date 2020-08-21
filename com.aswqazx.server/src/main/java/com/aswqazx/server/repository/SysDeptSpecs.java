@@ -1,9 +1,7 @@
 package com.aswqazx.server.repository;
 
 import com.aswqazx.server.entity.param.DeptParam;
-import com.aswqazx.server.entity.param.UserParam;
 import com.aswqazx.server.entity.table.SysDept;
-import com.aswqazx.server.entity.table.SysUser;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +20,8 @@ public class SysDeptSpecs {
             if (!StringUtils.isEmpty(param.getName())) {
                 predicates.add(builder.like(root.get("name").as(String.class), param.getName() + "%"));
             }
-            return query.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+            int size = predicates.size();
+            return query.where(predicates.toArray(new Predicate[size])).getRestriction();
         };
     }
 }

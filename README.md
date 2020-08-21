@@ -1,6 +1,7 @@
 # 简介 #
 **基于vue-element-admin和springboot基础项目**
 > 项目介绍
+- **`com.aswqazx.webflux` ：采用springboot webflux的demo服务**
 - **`com.aswqazx.server` ：采用springboot的后端base服务**
 - **`com.aswqazx.camunda` ：采用springboot的后端camunda服务**
 - **`vue-element-admin` ：基于vue-element-admin对接后端服务**
@@ -20,3 +21,4 @@
  - 200817 更新 添加deno node_koa例子
  - 200819 更新 添加denodb和denon
  - 200820 更新 deno添加jwt
+ - 200821 更新 添加webflux例子

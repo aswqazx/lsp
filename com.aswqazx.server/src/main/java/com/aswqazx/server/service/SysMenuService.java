@@ -9,7 +9,7 @@ public interface SysMenuService {
 
     /**
      * routes
-     * @return
+     * @return ResultInfo
      */
     ResultInfo routes();
 }

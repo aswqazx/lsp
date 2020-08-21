@@ -22,7 +22,8 @@ public class SysUserSpecs {
             if (!StringUtils.isEmpty(param.getUsername())) {
                 predicates.add(builder.like(root.get("username").as(String.class), param.getUsername() + "%"));
             }
-            return query.where(predicates.toArray(new Predicate[predicates.size()])).getRestriction();
+            int size = predicates.size();
+            return query.where(predicates.toArray(new Predicate[size])).getRestriction();
         };
     }
 }

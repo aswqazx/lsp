@@ -2,19 +2,21 @@ package com.aswqazx.server.util;
 
 import com.aswqazx.server.entity.ResultInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
  * @author OMNIS
  */
+@Log4j2
 public class SendMsgUtil {
 
     /**
      * 发送消息 text/html;charset=utf-8
-     * @param response
-     * @param str
-     * @throws Exception
+     * @param response response
+     * @param str str
      */
     public static void sendMessage(HttpServletResponse response, String str) {
         try {
@@ -24,15 +26,14 @@ public class SendMsgUtil {
             writer.close();
             response.flushBuffer();
         } catch (Exception e) {
-
+            log.error(e.getMessage());
         }
     }
 
     /**
      * 将某个对象转换成json格式并发送到客户端
-     * @param response
-     * @param resultInfo
-     * @throws Exception
+     * @param response response
+     * @param resultInfo resultInfo
      */
     public static void sendJsonMessage(HttpServletResponse response, ResultInfo resultInfo) {
         try {
@@ -44,7 +45,7 @@ public class SendMsgUtil {
             writer.close();
             response.flushBuffer();
         } catch (Exception e) {
-
+            log.error(e.getMessage());
         }
     }
 }

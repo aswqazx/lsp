@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class SysMenuServiceImpl implements SysMenuService {
 
     private final SysMenuRepository sysMenuRepository;
-    private static final String P_ZORE = "0";
+    private static final String P_ZERO = "0";
 
     @Override
     public ResultInfo routes() {
@@ -54,7 +54,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     private static List<Route> buildTree(List<Route> list) {
-        Map<String, List<Route>> resultMap = new HashMap<>();
+        Map<String, List<Route>> resultMap = new HashMap<>(16);
         list.forEach(route -> {
             List<Route> children = resultMap.getOrDefault(route.getParentId(), new ArrayList<>());
             children.add(route);
@@ -62,7 +62,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         });
         list.forEach(route -> route.setChildren(resultMap.get(route.getId())));
         return list.stream()
-                .filter(v -> P_ZORE.equals(v.getParentId()))
+                .filter(v -> P_ZERO.equals(v.getParentId()))
                 .collect(Collectors.toList());
     }
 }

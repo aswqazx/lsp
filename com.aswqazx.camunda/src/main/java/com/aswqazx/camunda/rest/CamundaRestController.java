@@ -35,6 +35,8 @@ import java.util.*;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CamundaRestController {
 
+    public static final String FORM_DATA_KEY = "formDataKey";
+
     private final RepositoryService repositoryService;
     private final HistoryService historyService;
     private final TaskService taskService;
@@ -45,8 +47,8 @@ public class CamundaRestController {
 
     /**
      * 发布流程
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/fblc")
     @CrossOrigin
@@ -79,8 +81,8 @@ public class CamundaRestController {
 
     /**
      * 流程部署列表
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lcbslb")
     @CrossOrigin
@@ -95,8 +97,8 @@ public class CamundaRestController {
 
     /**
      * 流程实例列表
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lcsllb")
     @CrossOrigin
@@ -111,8 +113,8 @@ public class CamundaRestController {
         if (!StringUtils.isEmpty(param.getSfjh())) {
             processDefinitionQuery.active();
         }
-        long count = 0;
-        List<ProcessDefinition> processDefinitionList = null;
+        long count;
+        List<ProcessDefinition> processDefinitionList;
         if (param.getPage() == 0 && param.getLimit() == 0) {
             count = processDefinitionQuery.count();
             processDefinitionList = processDefinitionQuery.list();
@@ -122,7 +124,7 @@ public class CamundaRestController {
         }
         List<Map<String, Object>> resultList = new ArrayList<>();
         for(ProcessDefinition processDefinition: processDefinitionList){
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>(16);
             map.put("name", processDefinition.getName());
             map.put("version", processDefinition.getVersion());
             map.put("key", processDefinition.getKey());
@@ -145,8 +147,8 @@ public class CamundaRestController {
 
     /**
      * 流程开关
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lckg")
     @CrossOrigin
@@ -162,8 +164,8 @@ public class CamundaRestController {
 
     /**
      * 流程删除
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lcslsc")
     @CrossOrigin
@@ -187,8 +189,8 @@ public class CamundaRestController {
 
     /**
      * 流程图
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lct")
     @CrossOrigin
@@ -206,15 +208,15 @@ public class CamundaRestController {
             str = result.toString(StandardCharsets.UTF_8.name());
             log.info(str);
         } catch (Exception e) {
-
+            log.error(e.getMessage());
         }
         return ResultInfo.success("获取流程图成功", str);
     }
 
     /**
      * 流程开始
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lcks")
     @CrossOrigin
@@ -228,12 +230,6 @@ public class CamundaRestController {
         }
         // camundaCandidateGroups是表达式的话 添加发起人的单位
         variables.put("dept", param.getFqrdw());
-        //分配任务的人员
-        /*List<String> assigneeList=new ArrayList<>();
-        assigneeList.add("系统管理员(1)");
-        assigneeList.add("测试(4298b71a-4db1-c4e9-9478-2cae0a5b8e59)");
-        assigneeList.add("测试2(08b78f38-b1bf-24e6-49ed-8dfa1fc19cc3)");
-        variables.put("assigneeList", assigneeList);*/
         //添加发起人
         identityService.setAuthenticatedUserId(param.getFqr());
         ProcessInstance instance = runtimeService.startProcessInstanceByKey(param.getProjectId(), variables);
@@ -253,8 +249,8 @@ public class CamundaRestController {
 
     /**
      * 我的申请
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/wdsq")
     @CrossOrigin
@@ -341,8 +337,8 @@ public class CamundaRestController {
 
     /**
      * 获取当前节点
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/hqdqjd")
     @CrossOrigin
@@ -363,8 +359,8 @@ public class CamundaRestController {
 
     /**
      * 获取节点
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/hqjd")
     @CrossOrigin
@@ -412,8 +408,8 @@ public class CamundaRestController {
 
     /**
      * 我的代办
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/wddb")
     @CrossOrigin
@@ -499,8 +495,8 @@ public class CamundaRestController {
 
     /**
      * 审核
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/sh")
     @CrossOrigin
@@ -520,11 +516,11 @@ public class CamundaRestController {
             String formDataKey = "";
             Map<String,Object> vars = taskService.getVariables(task.getId());
             if (vars.size() > 0) {
-                if (!StringUtils.isEmpty(vars.get("formDataKey"))) {
+                if (!StringUtils.isEmpty(vars.get(FORM_DATA_KEY))) {
                     if (!StringUtils.isEmpty(param.getFormDataKey())) {
-                        formDataKey = vars.get("formDataKey").toString() + "," + param.getFormDataKey();
+                        formDataKey = vars.get(FORM_DATA_KEY).toString() + "," + param.getFormDataKey();
                     } else {
-                        formDataKey = vars.get("formDataKey").toString();
+                        formDataKey = vars.get(FORM_DATA_KEY).toString();
                     }
                 }
             }
@@ -538,8 +534,8 @@ public class CamundaRestController {
 
     /**
      * 我的已办
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/wdyb")
     @CrossOrigin
@@ -606,8 +602,8 @@ public class CamundaRestController {
 
     /**
      * 任务分配给人员
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/rwfpry")
     @CrossOrigin
@@ -619,8 +615,8 @@ public class CamundaRestController {
 
     /**
      * 流程撤回
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lcch")
     @CrossOrigin
@@ -636,8 +632,8 @@ public class CamundaRestController {
 
     /**
      * 流程终止
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lczz")
     @CrossOrigin
@@ -649,8 +645,8 @@ public class CamundaRestController {
 
     /**
      * 流程重启 有问题
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lccq")
     @CrossOrigin
@@ -665,8 +661,8 @@ public class CamundaRestController {
 
     /**
      * 流程驳回
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lcbh")
     @CrossOrigin
@@ -710,8 +706,8 @@ public class CamundaRestController {
 
     /**
      * 流程跳转
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @PostMapping("/lctz")
     @CrossOrigin

@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 流程终止
+ * @author OMNIS
  */
 @Data
 public class LczzParam {

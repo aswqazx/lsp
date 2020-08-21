@@ -16,15 +16,15 @@ public interface SysUserRepository
 
     /**
      * 通过name查找user列表
-     * @param name
-     * @return
+     * @param name name
+     * @return List<SysUser>
      */
     List<SysUser> findAllByName(String name);
 
     /**
      * 通过username查找user列表
-     * @param username
-     * @return
+     * @param username username
+     * @return List<SysUser>
      */
     List<SysUser> findAllByUsername(String username);
 }

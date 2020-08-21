@@ -12,22 +12,22 @@ public interface SysDeptService {
 
     /**
      * deptList
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo deptList(DeptParam param);
 
     /**
      * addOrUpdate
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo addOrUpdate(SysDept param);
 
     /**
      * deptDelete
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo deptDelete(DeptDeleteParam param);
 }

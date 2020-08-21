@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 流程开始
+ * @author OMNIS
  */
 @Data
 public class LcksParam {

@@ -5,8 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +65,7 @@ public class JWTUtil {
         Date expireDate = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET_KEY);
         //头部信息
-        Map<String, Object> headerMap = new HashMap<>();
+        Map<String, Object> headerMap = new HashMap<>(16);
         headerMap.put("alg", "HS256");
         headerMap.put("typ", "JWT");
         // 附带username信息
@@ -83,15 +81,5 @@ public class JWTUtil {
                 .withExpiresAt(expireDate)
                 //签名
                 .sign(algorithm);
-    }
-
-    public static String getUserNameByRequest(HttpServletRequest request){
-        try {
-            String token = request.getHeader("X-Token");
-            DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("username").asString();
-        } catch (JWTDecodeException e) {
-            return null;
-        }
     }
 }

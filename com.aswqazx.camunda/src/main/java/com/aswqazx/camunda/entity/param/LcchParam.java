@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 流程撤回
+ * @author OMNIS
  */
 @Data
 public class LcchParam {

@@ -13,42 +13,42 @@ public interface SysUserService {
 
     /**
      * login
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo userLogin(LoginParam param);
 
     /**
      * getLoginInfo
-     * @param token
-     * @return
+     * @param token token
+     * @return ResultInfo
      */
     ResultInfo userInfo(String token);
 
     /**
      * logout
-     * @return
+     * @return ResultInfo
      */
     ResultInfo userLogout();
 
     /**
      * userList
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo userList(UserParam param);
 
     /**
      * addOrUpdate
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo addOrUpdate(SysUser param);
 
     /**
      * userDelete
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     ResultInfo userDelete(UserDeleteParam param);
 

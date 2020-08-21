@@ -70,7 +70,7 @@ public class SnowFlake {
     /**
      * 产生下一个ID
      *
-     * @return
+     * @return long
      */
     private synchronized long nextId() {
         long currStmp = getNewstmp();
@@ -102,7 +102,7 @@ public class SnowFlake {
     /**
      * 如果当前毫秒值下的序列号用完，就循环获取下个毫秒值，如果没有获取到下个毫秒值就
      * 一直循环下去
-     * @return
+     * @return long
      */
     private long getNextMill() {
         long mill = getNewstmp();

@@ -3,24 +3,16 @@ package com.aswqazx.server.service.impl;
 import com.aswqazx.server.entity.ResultInfo;
 import com.aswqazx.server.entity.param.DeptDeleteParam;
 import com.aswqazx.server.entity.param.DeptParam;
-import com.aswqazx.server.entity.param.Route;
 import com.aswqazx.server.entity.table.SysDept;
-import com.aswqazx.server.entity.table.SysUser;
 import com.aswqazx.server.repository.SysDeptRepository;
 import com.aswqazx.server.repository.SysDeptSpecs;
-import com.aswqazx.server.repository.SysUserSpecs;
 import com.aswqazx.server.service.SysDeptService;
 import com.aswqazx.server.util.SnowFlake;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,7 +25,7 @@ import java.util.stream.Collectors;
 public class SysDeptServiceImpl implements SysDeptService {
 
     private final SysDeptRepository sysDeptRepository;
-    private static final long P_ZORE = 0;
+    private static final long P_ZERO = 0;
 
     @Override
     public ResultInfo deptList(DeptParam param) {
@@ -72,7 +64,7 @@ public class SysDeptServiceImpl implements SysDeptService {
     }
 
     private static List<SysDept> buildTree(List<SysDept> list) {
-        Map<Long, List<SysDept>> resultMap = new HashMap<>();
+        Map<Long, List<SysDept>> resultMap = new HashMap<>(16);
         list.forEach(sysDept -> {
             List<SysDept> children = resultMap.getOrDefault(sysDept.getPreId(), new ArrayList<>());
             children.add(sysDept);
@@ -80,7 +72,7 @@ public class SysDeptServiceImpl implements SysDeptService {
         });
         list.forEach(sysDept -> sysDept.setChildren(resultMap.get(sysDept.getId())));
         return list.stream()
-                .filter(v -> P_ZORE == v.getPreId())
+                .filter(v -> P_ZERO == v.getPreId())
                 .collect(Collectors.toList());
     }
 }

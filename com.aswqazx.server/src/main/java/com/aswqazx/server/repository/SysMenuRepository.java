@@ -1,7 +1,6 @@
 package com.aswqazx.server.repository;
 
 import com.aswqazx.server.entity.table.SysMenu;
-import com.aswqazx.server.entity.table.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,7 @@ public interface SysMenuRepository
 
     /**
      * ORDER_NUM排序获取列表
-     * @return
+     * @return List<SysMenu>
      */
     List<SysMenu> findAllByOrderByOrderNumAsc();
 }

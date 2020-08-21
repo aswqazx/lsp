@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -37,8 +36,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * userLogin
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @Override
     public ResultInfo userLogin(LoginParam param) {
@@ -46,7 +45,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (sysUserList.size() > 0) {
             SysUser sysUser = sysUserList.get(0);
             if (sysUser.getPassword().equals(param.getPassword())) {
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>(16);
                 String token = JWTUtil.sign(sysUser.getUsername());
                 map.put("token", token);
                 return ResultInfo.success("成功", map);
@@ -60,8 +59,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * userInfo
-     * @param token
-     * @return
+     * @param token 参数
+     * @return ResultInfo
      */
     @Override
     public ResultInfo userInfo(String token) {
@@ -70,7 +69,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (sysUserList.size() > 0) {
             SysUser sysUser = sysUserList.get(0);
             String[] roles ={"admin"};
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>(16);
             map.put("name", sysUser.getName());
             map.put("avatar", sysUser.getAvatar());
             map.put("introduction", "I am a super administrator");
@@ -83,7 +82,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * userLogout
-     * @return
+     * @return ResultInfo
      */
     @Override
     public ResultInfo userLogout() {
@@ -92,8 +91,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * userList
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @Override
     public ResultInfo userList(UserParam param) {
@@ -110,8 +109,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * addOrUpdate
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @Override
     public ResultInfo addOrUpdate(SysUser param) {
@@ -129,8 +128,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * userDelete
-     * @param param
-     * @return
+     * @param param 参数
+     * @return ResultInfo
      */
     @Override
     public ResultInfo userDelete(UserDeleteParam param) {
