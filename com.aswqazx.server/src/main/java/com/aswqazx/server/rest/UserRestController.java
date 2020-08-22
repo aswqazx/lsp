@@ -76,4 +76,14 @@ public class UserRestController {
         log.info("user/delete {}", param);
         return sysUserService.userDelete(param);
     }
+
+    @GetMapping("/test")
+    public String test() {
+        try {
+            Thread.sleep (100);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return "hello";
+    }
 }
