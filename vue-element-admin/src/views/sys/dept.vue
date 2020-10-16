@@ -19,6 +19,7 @@
             <el-form-item>
               <el-button @click="onReset">重置</el-button>
               <el-button type="primary" @click="onSearch">查询</el-button>
+              <el-button type="primary" @click="handleALiPay">支付宝</el-button>
               <el-button type="text" @click="showMore">{{ showText }}</el-button>
             </el-form-item>
           </el-col>
@@ -94,6 +95,7 @@
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </el-card>
     <deptAddOrUpdate ref="deptAddOrUpdate" @afterDeptAddOrUpdate="afterDeptAddOrUpdate" />
+    <div ref="alipayWap" v-html="alipayWap" />
   </div>
 </template>
 
@@ -101,6 +103,7 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { getDeptList, deptDelete } from '@/api/dept'
+import { getALiPay } from '@/api/pay'
 import empty from '@/components/Empty'
 import deptAddOrUpdate from './components/DeptAddOrUpdate'
 
@@ -140,7 +143,8 @@ export default {
       showColName: true,
       showColPreName: true,
       showColCreateTime: true,
-      showColStatus: true
+      showColStatus: true,
+      alipayWap: null
     }
   },
   created() {
@@ -207,6 +211,23 @@ export default {
     },
     afterDeptAddOrUpdate() {
       this.getList()
+    },
+    handleALiPay() {
+      getALiPay(this.listQuery).then(response => {
+        /* const divForm = document.getElementsByTagName('divform')
+        if (divForm.length) {
+          document.body.removeChild(divForm[0])
+        }
+        const div = document.createElement('divform')
+        div.innerHTML = response.data // data就是接口返回的form 表单字符串
+        document.body.appendChild(div)
+        document.forms[0].setAttribute('target', '_blank') // 新开窗口跳转
+        document.forms[0].submit()*/
+        this.alipayWap = response.data
+        this.$nextTick(() => {
+          this.$refs.alipayWap.children[0].submit()
+        })
+      })
     }
   }
 }
